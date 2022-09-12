@@ -12,6 +12,9 @@ const JsonEncoder globalJsonEncoder = JsonEncoder.withIndent('  ');
 const String urlScheme = r'http(s?)://';
 final RegExp urlRegExp = RegExp(urlScheme);
 
+const String urlFullScheme = r'(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)';
+final RegExp urlFullRegExp = RegExp(urlFullScheme);
+
 // transparent image 2:1
 final kTransparentImage = Uint8List.fromList([
   0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, //

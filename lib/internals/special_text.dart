@@ -5,6 +5,7 @@
 import 'package:extended_text/extended_text.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:juejin/constants/constants.dart';
 
 import '../constants/themes.dart';
 
@@ -39,9 +40,40 @@ class TopicText extends RegExpSpecialText {
   }
 }
 
+class UrlText extends RegExpSpecialText {
+  /// [http(s?)://www.example.com]
+  ///
+  /// - Match paired http url
+  @override
+  final RegExp regExp = urlFullRegExp;
+
+  @override
+  InlineSpan finishText(
+      int start,
+      Match match, {
+        TextStyle? textStyle,
+        SpecialTextGestureTapCallback? onTap,
+      }) {
+    final String actualText = toString();
+
+    return SpecialTextSpan(
+      text: '${match.group(0)}',
+      actualText: actualText,
+      start: start,
+      style: (textStyle ?? const TextStyle()).copyWith(
+        color: themeColorLight,
+      ),
+      recognizer: onTap != null
+          ? (TapGestureRecognizer()..onTap = () => onTap(actualText))
+          : null,
+    );
+  }
+}
+
+
 class JJRegExpSpecialTextSpanBuilder extends RegExpSpecialTextSpanBuilder {
   @override
   List<RegExpSpecialText> get regExps {
-    return <RegExpSpecialText>[TopicText()];
+    return <RegExpSpecialText>[TopicText(), UrlText()];
   }
 }

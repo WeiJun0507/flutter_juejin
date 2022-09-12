@@ -274,6 +274,46 @@ class _PinItemWidget extends StatelessWidget {
     );
   }
 
+  Widget _buildLink(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        borderRadius: RadiusConstants.r4,
+        color: context.theme.canvasColor,
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              borderRadius: RadiusConstants.r4,
+              color: context.theme.primaryColor,
+            ),
+            child: Icon(Icons.link, color: context.theme.cardColor,),
+          ),
+
+          const Gap.h(8),
+
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(pin.msgInfo.urlTitle, style: context.textTheme.titleSmall?.copyWith(
+                  fontSize: 12.0,
+                ),
+                ),
+                const Gap.v(8.0),
+                Text(Uri.parse(pin.msgInfo.url).host, style: context.textTheme.caption,),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildTopic(BuildContext context) {
     final Color themeColor = Color.lerp(themeColorLight, Colors.white, .2)!;
     return Tapper(
@@ -429,6 +469,10 @@ class _PinItemWidget extends StatelessWidget {
             _buildImages(context),
             const Gap.v(10),
           ],
+          if (pinInfo.url.isNotEmpty) ...[
+            _buildLink(context),
+            const Gap.v(10),
+          ],
           if (hotComment != null) ...<Widget>[
             _buildHotComment(context),
             const Gap.v(10),
@@ -481,6 +525,7 @@ class _PinContentWidgetState extends State<_PinContentWidget> {
           maxLines: isExpanding ? null : _pinContentMaxLines,
           onSpecialTextTap: (val) {
             if (val is TopicText) {}
+            if (val is UrlText) {}
           },
           overflowWidget: TextOverflowWidget(
             child: Text.rich(
